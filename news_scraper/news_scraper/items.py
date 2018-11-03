@@ -17,4 +17,5 @@ class NewsScraperItem(scrapy.Item):
 
 class NewsItem(scrapy.Item):
     article = scrapy.Field()
-    title = scrapyField()
+    title = scrapy.Field()
+    class = scrapy.Field()
