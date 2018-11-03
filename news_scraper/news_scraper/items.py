@@ -11,7 +11,6 @@ import scrapy
 class NewsScraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    title
     url_from = scrapy.Field()
     # The destination URL
     url_to = scrapy.Field()
