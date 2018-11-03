@@ -1,7 +1,7 @@
 from scrapy.spiders import BaseSpider
 from scrapy.selector import HtmlXPathSelector
 import re
-from news_scraper.items import theStarItem
+from news_scraper.items import NewsItem
 
 
 class MySpider(BaseSpider):
@@ -24,19 +24,7 @@ class MySpider(BaseSpider):
             str = str + text + " "
 
         # create the vector
-        vector={}
-        restrictions = [" ", ".", ",", "\"", "!", "?"]
-        start = 0
-        for i in range(len(str)):
-            if str[i] in restrictions:
-                if str[start:i] not in restrictions:
-                    if str[start:i].lower() not in vector:
-                        vector[str[start:i].lower()] = 0
-                    vector[str[start:i].lower()] += 1
-                start = i
 
-
-        print(vector)
-        tSItem = theStarItem()
-        tSItem["vector"] = vector
+        tSItem = NewsItem()
+        tSItem["article"] = str
         return vector

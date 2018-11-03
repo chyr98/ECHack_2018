@@ -14,3 +14,7 @@ class NewsScraperItem(scrapy.Item):
     url_from = scrapy.Field()
     # The destination URL
     url_to = scrapy.Field()
+
+class NewsItem(scrapy.Item):
+    article = scrapy.Field()
+    title = scrapyField()
