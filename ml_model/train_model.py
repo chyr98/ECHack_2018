@@ -11,28 +11,23 @@ REAL_PATH = './../news_scraper/thestar.csv'
 FAKE_PATH = './../theonionscraper/page_data.csv'
 
 real_df = pd.read_csv(REAL_PATH)
-print(len(real_df.index))
 fake_df = pd.read_csv(FAKE_PATH)
-print(len(fake_df.index))
 doc_df = fake_df.append(real_df)
-print(len(doc_df.index))
-print(np.array(doc_df)[323:325])
 
 doc_df_array = np.array(doc_df)
 
-vectorizer = CountVectorizer()
+left_vectorizer = CountVectorizer()
+right_vectorizer = CountVectorizer()
 
-print(doc_df_array[0][2])
+table = string.maketrans("","")
 for i in range(len(doc_df_array)):
-    print(i)
     
-    doc_df_array[i][0] = ((str)(doc_df_array[i][0])).translate(None, string.punctuation)
-    print(doc_df_array[i][2])
-    doc_df_array[i][2] = ((str)(doc_df_array[i][2])).translate(None, string.punctuation)
+    doc_df_array[i][0] = ((str)(doc_df_array[i][0])).translate(table, string.punctuation)
+    doc_df_array[i][2] = ((str)(doc_df_array[i][2])).translate(table, string.punctuation)
 
 
-left_vec_df = vectorizer.fit_transform(doc_df_array[:,0]).toarray()
-right_vec_df = vectorizer.fit_transform(doc_df_array[:,2]).toarray()
+left_vec_df = left_vectorizer.fit_transform(doc_df_array[:,0]).toarray()
+right_vec_df = right_vectorizer.fit_transform(doc_df_array[:,2]).toarray()
 vec_df = np.concatenate((left_vec_df, right_vec_df), axis=1)
 
 
@@ -50,6 +45,7 @@ accuracy = clf.score(X_test, y_test)
 print(accuracy)
 
 pickle.dump(clf, open("./model", 'wb'))
-
+pickle.dump(left_vectorizer, open("./lv", 'wb'))
+pickle.dump(right_vectorizer, open("./rv", 'wb'))
 
 
