@@ -8,14 +8,11 @@
 import scrapy
 
 
-class NewsScraperItem(scrapy.Item):
+class TheOnionScraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    url_from = scrapy.Field()
-    # The destination URL
-    url_to = scrapy.Field()
-
-class NewsItem(scrapy.Item):
-    article = scrapy.Field()
+    url = scrapy.Field()
+class TheOnionDataItem(scrapy.Item):
     title = scrapy.Field()
+    article = scrapy.Field()
     classification = scrapy.Field()
