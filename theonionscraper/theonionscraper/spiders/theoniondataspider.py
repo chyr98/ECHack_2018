@@ -12,12 +12,11 @@ URL = 'http://%s' % DOMAIN
 class OnionDataSpider(Spider):
     def __init__(self, file='', **kwargs):
         self.start_urls = []
-        with open('output1.csv') as csvfile:
+        with open('extras.csv') as csvfile:
             reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
             for row in reader:
                 self.start_urls.append(row[0])
         super().__init__(**kwargs)
-        print(self.start_urls)
     
     name = "onion_data_spider"
     allowed_domains = [DOMAIN]
