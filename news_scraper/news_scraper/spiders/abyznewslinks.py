@@ -7,7 +7,7 @@ from news_scraper.items import NewsScraperItem
 
 class AbyznewslinksSpider(CrawlSpider):
     name = 'abz'
-
+    depth = 400
     # The domains that are allowed (links to other domains are skipped)
     allowed_domains = ['thestar.com']
 
@@ -36,16 +36,20 @@ class AbyznewslinksSpider(CrawlSpider):
     # Method for parsing items
     def parse_items(self, response):
         # The list of items that are found on the particular page
+        self.depth -= 1
+        if self.depth <= 0:
+            return []
         items = []
         # Only extract canonicalized and unique links (with respect to the current page)
         links = LinkExtractor(canonicalize=True, unique=True).extract_links(response)
+        # links = response.xpath('//a[@href]')
         # Now go through all the found links
         for link in links:
             # Check whether the domain of the URL of the link is allowed; so whether it is in one of the allowed domains
             is_allowed = False
 
             for allowed_domain in self.allowed_domains:
-                if allowed_domain in link.url:
+                if allowed_domain in link.url and len(link.url) > len(response.url):
                     is_allowed = True
 
             article_tag = response.xpath("//li[contains(@class, 'article__loader')]")
@@ -57,5 +61,6 @@ class AbyznewslinksSpider(CrawlSpider):
                 item['url_from'] = response.url
                 item['url_to'] = link.url
                 items.append(item)
+
         # Return all the found items
         return items

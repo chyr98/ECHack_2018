@@ -28,6 +28,6 @@ class MySpider(BaseSpider):
         tSItem = NewsItem()
         tSItem["article"] = str
         tSItem["title"] = response.xpath('//h1[contains(@class, "article__headline")]/text()').extract()[0]
-        tSItem["classification"] = 1
+        tSItem["classification"] = 0
 
-        return vector
+        return tSItem
