@@ -1,5 +1,4 @@
 function addPageRules() {
-
     var rule1 = {
         conditions: [
             new chrome.declarativeContent.PageStateMatcher({
@@ -21,4 +20,17 @@ chrome.runtime.onInstalled.addListener(function() {
     });
     addPageRules();
 
+});
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log(sender.tab ?
+                  "from a content script:" + sender.tab.url :
+                  "from the extension");
+        console.log(request);
+        // if (request.greeting == "hello") {
+        //     console.log('pipipipipipipipipip');
+        // sendResponse({farewell: "goodbye"});
+        // }
+        
 });
