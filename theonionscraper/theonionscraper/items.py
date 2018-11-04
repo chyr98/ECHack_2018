@@ -11,9 +11,8 @@ import scrapy
 class TheOnionScraperItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    url_from = scrapy.Field()
-    url_to = scrapy.Field()
+    url = scrapy.Field()
 class TheOnionDataItem(scrapy.Item):
-    heading = scrapy.Field()
-    content = scrapy.Field()
-    classif = scrapy.Field()
+    title = scrapy.Field()
+    article = scrapy.Field()
+    classification = scrapy.Field()

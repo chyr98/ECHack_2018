@@ -33,19 +33,20 @@ class OnionSpider(CrawlSpider):
         links = LinkExtractor(canonicalize=False, unique=True).extract_links(response)
         items = []
         for link in links:
-            link_page = requests.get(link.url) # get-request for the current link
-            link_tree = html.fromstring(link_page.content) # builds the html/xml tree from the above opened link
+            validated = True
             allowed = False
             for ad in self.allowed_domains:
                 if(ad in link.url):
-                    allowed = True
-            link_checks = link_tree.xpath(check_path)
-            if not(link_checks):
-                allowed = False # link does not lead to an article
+                    allowed = True   
             if(allowed):
+                link_page = requests.get(link.url) # get-request for the current link
+                link_tree = html.fromstring(link_page.content) # builds the html/xml tree from the above opened link
+                link_checks = link_tree.xpath(check_path)
+            if (allowed) and (not(link_checks)):
+                validated = False # link does not lead to an article
+            if(allowed and validated):
                 newitem = TheOnionScraperItem()
-                newitem ['url_from'] = link.url
-                newitem ['url_to'] = response.url
+                newitem ['url'] = link.url
                 items.append(newitem)
         return items # return list of scraped items which are urls to articles which can be data-scraped.
         
