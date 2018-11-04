@@ -1,0 +1,25 @@
+* {
+    padding: 0;
+}
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 400px;
+    height: 180;    
+}
+
+.header-div {
+    margin-top: 0px;
+    border-bottom: 5px solid #3104A7;
+    text-align: center;
+    height: 50px;
+}
+
+.trump-img {
+    height: 100px;
+    width: 100px;
+}
+
+.result-div {
+    text-align: center;
+}
