@@ -5,14 +5,22 @@ from scrapy.linkextractors import LinkExtractor
 from theonionscraper.items import TheOnionScraperItem
 from theonionscraper.items import TheOnionDataItem
 import scrapy
+import csv
+import re
 DOMAIN = 'theonion.com'
 URL = 'http://%s' % DOMAIN
 class OnionDataSpider(Spider):
+    def __init__(self, file='', **kwargs):
+        self.start_urls = []
+        with open('output1.csv') as csvfile:
+            reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+            for row in reader:
+                self.start_urls.append(row[0])
+        super().__init__(**kwargs)
+        print(self.start_urls)
+    
     name = "onion_data_spider"
     allowed_domains = [DOMAIN]
-    start_urls = [
-       "https://politics.theonion.com/trump-claims-he-can-overrule-constitution-with-executiv-1830106306"
-    ]
     def start_requests(self):
         for url in self.start_urls:
             yield scrapy.Request(url, callback=self.parse, dont_filter=False)

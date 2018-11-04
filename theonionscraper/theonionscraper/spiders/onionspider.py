@@ -29,7 +29,7 @@ class OnionSpider(CrawlSpider):
             yield scrapy.Request(url, callback=self.parse, dont_filter=False)
     
     def parse_item(self, response):
-        check_path = '//head/meta[@content=\'article\']'
+        check_path = '//head/meta[@content="article"]'
         links = LinkExtractor(canonicalize=False, unique=True).extract_links(response)
         items = []
         for link in links:
@@ -45,9 +45,8 @@ class OnionSpider(CrawlSpider):
             if (allowed) and (not(link_checks)):
                 validated = False # link does not lead to an article
             if(allowed and validated):
+                print(link_checks[0])
                 newitem = TheOnionScraperItem()
                 newitem ['url'] = link.url
                 items.append(newitem)
         return items # return list of scraped items which are urls to articles which can be data-scraped.
-        
-
