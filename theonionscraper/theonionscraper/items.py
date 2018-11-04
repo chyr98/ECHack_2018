@@ -13,3 +13,7 @@ class TheOnionScraperItem(scrapy.Item):
     # name = scrapy.Field()
     url_from = scrapy.Field()
     url_to = scrapy.Field()
+class TheOnionDataItem(scrapy.Item):
+    heading = scrapy.Field()
+    content = scrapy.Field()
+    classif = scrapy.Field()
