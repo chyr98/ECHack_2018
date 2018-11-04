@@ -4,6 +4,8 @@ from scrapy.http import Request
 from scrapy.linkextractors import LinkExtractor
 from theonionscraper.items import TheOnionScraperItem
 import scrapy
+import requests
+from lxml import html
 DOMAIN = 'theonion.com'
 URL = 'http://%s' % DOMAIN
 class OnionSpider(CrawlSpider):
@@ -16,7 +18,7 @@ class OnionSpider(CrawlSpider):
         Rule(
             LinkExtractor(
                 unique=True,
-                canonicalize=True
+                canonicalize=False
             ),
             follow=True,
             callback="parse_item"
@@ -28,21 +30,23 @@ class OnionSpider(CrawlSpider):
     
     def parse_item(self, response):
         check_path = '//head/meta[@content=\'article\']'
-        links = LinkExtractor(canonicalize=True, unique=True).extract_links(response)
+        links = LinkExtractor(canonicalize=False, unique=True).extract_links(response)
         items = []
         for link in links:
+            link_page = requests.get(link.url) # get-request for the current link
+            link_tree = html.fromstring(link_page.content) # builds the html/xml tree from the above opened link
             allowed = False
             for ad in self.allowed_domains:
                 if(ad in link.url):
                     allowed = True
-            checks = response.xpath(check_path).extract()
-            if not(checks):
-                allowed = False # not an article
+            link_checks = link_tree.xpath(check_path)
+            if not(link_checks):
+                allowed = False # link does not lead to an article
             if(allowed):
                 newitem = TheOnionScraperItem()
                 newitem ['url_from'] = link.url
                 newitem ['url_to'] = response.url
                 items.append(newitem)
-        return items # return list of scraped items which are urls to articles which can be scraped.
+        return items # return list of scraped items which are urls to articles which can be data-scraped.
         
 
